@@ -18,11 +18,36 @@ def setup_database():
                          passwd=db_passwd(),
                          db=db_name())
 
-    global db_cursor
-    db_cursor = db.cursor()
-
     print("Database initialized!")
 
-def database_cursor():
-    global db_cursor
-    return db_cursor
+
+
+def db_update_location(location_key, location_dict):
+    global db
+
+    db_cursor = db.cursor()
+
+    for connector in location_dict["connectors"]:
+        try:
+            # Get or create connector id
+            connector_id = db_get_connector_id(db_cursor, location_key, connector["variant"])
+            if connector_id is None:
+                db_cursor.execute("INSERT INTO connector (location_key, connector_variant) VALUES (%s, %s)", (location_key, connector["variant"]))
+                connector_id = db_get_connector_id(db_cursor, location_key, connector["variant"])
+
+            # Update downtime
+            print("%s" % connector_id)
+
+        except BaseException as e:
+            print("Error: %s" % e.message)
+
+    db.commit()
+
+
+def db_get_connector_id(db_cursor, location_key, connector_variant):
+    try:
+        db_cursor.execute("SELECT id FROM connector WHERE location_key=%s AND connector_variant=%s", (location_key, connector_variant))
+        row = db_cursor.fetchone()
+        return row[0]
+    except BaseException:
+        return None

@@ -1,6 +1,6 @@
 import urllib.request
 from xml.dom import minidom
-from database import setup_database
+from database import setup_database, db_update_location
 
 webservice_url = 'http://services.clever.dk/poi.1.5.xml'
 
@@ -65,6 +65,7 @@ def fetch_poi():
         payment = node_value(location_item, 'payment')
         pay_button_text = node_value(location_item, 'payButton')
         pay_link = node_value(location_item, 'payLink')
+
         connector_list = []
         for connector in location_item.getElementsByTagName('connectors'):
             variant = node_value(connector, 'variant')
@@ -77,6 +78,7 @@ def fetch_poi():
                                    'available': available,
                                    'occupied': occupied,
                                    'error': error})
+
         locations_dict[location_id] = {'latitude': latitude,
                                        'longitude': longitude,
                                        'name': name,
@@ -95,6 +97,7 @@ def fetch_poi():
                                        'payLink': pay_link,
                                        'connectors': connector_list}
 
+        db_update_location(location_id, locations_dict[location_id])
 
     global cached_poi_dict
     cached_poi_dict = {'cacheableItems': cacheable_item_dict,

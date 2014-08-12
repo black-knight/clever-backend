@@ -10,7 +10,7 @@ use trollsahead$clever;
 drop table if exists connector;
 create table connector (id INT NOT NULL AUTO_INCREMENT,
                         location_key VARCHAR(100) NOT NULL,
-                        connector_variant VARCHAR(100) NOT NULL,
+                        connector_variant VARCHAR(100) NOT NULL UNIQUE,
                         PRIMARY KEY ( id )
 );
 
