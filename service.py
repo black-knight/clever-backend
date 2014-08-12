@@ -13,10 +13,10 @@ def refresh():
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify( { 'error': 'Not found' } ), 404)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 initialize()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8083, use_reloader=False)
+    app.run(debug=True, use_reloader=False)
 

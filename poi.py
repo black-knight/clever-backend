@@ -1,6 +1,6 @@
 import urllib.request
-import MySQLdb
 from xml.dom import minidom
+from database import setup_database
 
 webservice_url = 'http://services.clever.dk/poi.1.5.xml'
 
@@ -9,17 +9,6 @@ cached_poi_dict = {}
 def initialize():
     setup_database()
     update_poi()
-
-
-
-def setup_database():
-    global db
-    global db_cursor
-    db = MySQLdb.connect(host="mysql.server",
-                         user="trollsahead",
-                         passwd="Test1234",
-                         db="trollsahead$clever")
-    db_cursor = db.cursor()
 
 
 

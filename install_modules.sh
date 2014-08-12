@@ -1,3 +1,4 @@
 #!/usr/bin/bash
-sudo pip install flask
+sudo pip3 install flask
+sudo pip3 install pymysql
 
